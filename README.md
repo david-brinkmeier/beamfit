@@ -9,7 +9,7 @@
   - Built-in functionality includes various DC-offset removal / noise removal techniques including 
   [noisecomp][kovesi] from Peter Kovesi and [TV-L1 denoising][tvl1] from Manolis Lourakis.
   - Automated and/or GUI-cropping / pre-scaling of input for faster fitting etc.
-  - Why is this important? Second-order moment determinateion of beam diameter/radius is particularly prone to measurement noise
+  - Why image cleanup? Second-order moment determination of beam diameter/radius is particularly prone to measurement noise
   - Additionally / alternatively an offset background image may also be provided.
   
 - Offline analysis supports image and video processing
