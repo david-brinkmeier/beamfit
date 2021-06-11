@@ -2,11 +2,14 @@ clc
 clearvars
 close all
 
+
+%% INFO
 % Select one or multiple images OR select one or multiple videos for
 % processing. Videos may be time-averaged.
-% Video results are a nested structure of per frame results and results for
-% the complete video.
-% especially if processing a complete video it is advised to disable
+%
+% Video results yield a nested structure of per frame results 
+% and results for the complete video.
+% Especially if processing a complete video it is advised to disable
 % settings.savebeamprofile in order not to bloat the results.mat
 % Video processing only supports output of video and .mat file, if you need
 % every fig as .fig and results as .csv provide single images
@@ -19,13 +22,13 @@ addpath(genpath('dependencies'))
 settings.fitvariant = 'gaussian'; % Fit model: 'gaussian' or 'donutgaussian' (donutgaussian is a trepanning symmetric gaussian)
 settings.CCDpixelpitch = 5.2; % Camera pixel pitch (square pixels) in µm
 settings.scaleInputFactor = 1; % scale input image (value < 1 reduces pixel count -> faster computation, > 1 oversampling)
-settings.useCOG = true; % true: use COG as centroid for start of fit, false: use index(max value) as start for regression, empty []: NONE
+settings.useCOG = 1; % true: use COG as centroid for start of fit, false: use index(max value) as start for regression, empty []: NONE
 settings.Crop = 'user'; % Valid strings are 'off', 'user' and 'auto'
 settings.AutoCropStrength = 0; % Accepted Values: 0-100 (scaled as 0% loss to 50% acceptable energy loss)
 settings.PostProcessing = 'medium'; % accepted values: 'off', 'low', 'medium', 'high', 'veryhigh', 'ultra', 'maximum'; Ultra adds kovesi, maximum adds TVDenoising
-settings.ISO11146 = true; % Calculate 2nd order central moments and plot ellipse + output beam radius short/long
-settings.plot = true; % Plot results / automatically true if we save figure
-settings.view3D = true; % use 3D view instead of 2D (surf instead of imagesc), for video processing consider fixing zlim in guassfit.m
+settings.ISO11146 = 1; % Calculate 2nd order central moments and plot ellipse + output beam radius short/long
+settings.plot = 1; % Plot results / automatically true if we save figure
+settings.view3D = 0; % use 3D view instead of 2D (surf instead of imagesc), for video processing consider fixing zlim in guassfit.m
 settings.zlim = []; % useful for plotting 3D view of videos, needed to avoid the surf plot from "jumping", ex. uint8 max = 255;
 settings.colormap = 'parula'; % Matlab colormaps: 'gray', 'parula', 'jet'
 settings.shading = 'interp'; % Shading: 'flat' or 'interp' recommended
