@@ -3,8 +3,7 @@
 ![](docs/logo.png?raw=true "beamfit")
 
 ## Offline and Online analysis for laser beams
-  - Least square elliptical rotated Gaussian fit (D4σ specification).
-    - cf. [docs](docs/)
+  - Least square elliptical rotated Gaussian fit (D4σ specification), cf. [docs](docs/).
   - Least square trepanning (rotating on a circular path) symmetrical Gaussian fit (D4σ specification).
   - Second-order moments / ISO11146 beam width for elliptic beams (D4σ specification).
     - Based on this [implementation][imagemoments] by Raphaël Candelier with minor adjustments to fit the ISO11146 spec.
