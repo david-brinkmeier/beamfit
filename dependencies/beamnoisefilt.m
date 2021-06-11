@@ -1,6 +1,15 @@
 function [output_image,abort] = beamnoisefilt(input_image,settings)
-% Filter input image to prepare for gaussian beam fit
+% Copyright (c) 2021 David Brinkmeier
+% davidbrinkmeier@gmail.com
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, subject to the following conditions:
+% The above copyright notice and this permission notice shall be included in
+% all copies or substantial portions of the Software.
+% The Software is provided "as is", without warranty of any kind.
 
+% Filter input image to prepare for gaussian beam fit
 % if we don't have a background noise image we estimate noise dc offset by
 % extracting 4 edge quadrants and looking for median value to be taken as
 % background noise offset

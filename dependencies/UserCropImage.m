@@ -1,12 +1,20 @@
 function [image_out, limits] = UserCropImage(varargin)
+% Copyright (c) 2021 David Brinkmeier
+% davidbrinkmeier@gmail.com
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, subject to the following conditions:
+% The above copyright notice and this permission notice shall be included in
+% all copies or substantial portions of the Software.
+% The Software is provided "as is", without warranty of any kind.
+
 % Prompts user to draw a rectangle, region enclosed by rectangle will be
 % extracted from image
-
 % input arguments [image,colormap,forcesquare,limits]
 % if limits are provided, then we don't prompt user and simply use these
 % limits to extract the image
 % limits must be a struct where limits.x and limits.y are integer (2,1) arrays
-
 % ex. get limits from user
 % [~,limits] = UserCropImage(inputimage,colormap,true);
 

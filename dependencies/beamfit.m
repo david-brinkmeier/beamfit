@@ -1,4 +1,14 @@
 function results = beamfit(varargin)
+% Copyright (c) 2021 David Brinkmeier
+% davidbrinkmeier@gmail.com
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, subject to the following conditions:
+% The above copyright notice and this permission notice shall be included in
+% all copies or substantial portions of the Software.
+% The Software is provided "as is", without warranty of any kind.
+
 % [results,fighandles] = beamfit(varargin)
 % This function is used to fit an elliptical gaussian beam or rotating symmetric gaussian to a picture
 % taken by a CMOS/CCD Camera with square pixels
