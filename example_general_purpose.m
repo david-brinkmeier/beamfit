@@ -2,7 +2,6 @@ clc
 clearvars
 close all
 
-
 %% INFO
 % Select one or multiple images OR select one or multiple videos for
 % processing. Videos may be time-averaged.
@@ -28,7 +27,7 @@ settings.AutoCropStrength = 0; % Accepted Values: 0-100 (scaled as 0% loss to 50
 settings.PostProcessing = 'medium'; % accepted values: 'off', 'low', 'medium', 'high', 'veryhigh', 'ultra', 'maximum'; Ultra adds kovesi, maximum adds TVDenoising
 settings.ISO11146 = 1; % Calculate 2nd order central moments and plot ellipse + output beam radius short/long
 settings.plot = 1; % Plot results / automatically true if we save figure
-settings.view3D = 0; % use 3D view instead of 2D (surf instead of imagesc), for video processing consider fixing zlim in guassfit.m
+settings.view3D = 1; % use 3D view instead of 2D (surf instead of imagesc), for video processing consider fixing zlim in guassfit.m
 settings.zlim = []; % useful for plotting 3D view of videos, needed to avoid the surf plot from "jumping", ex. uint8 max = 255;
 settings.colormap = 'parula'; % Matlab colormaps: 'gray', 'parula', 'jet'
 settings.shading = 'interp'; % Shading: 'flat' or 'interp' recommended
