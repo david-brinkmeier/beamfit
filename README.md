@@ -1,13 +1,16 @@
 # Beamfit
 
-- Offline and Online analysis for laser beams, models include
+![Alt text](docs/logo.png?raw=true "Title")
+
+
+## Offline and Online analysis for laser beams, models include
   - Least square elliptical rotated Gaussian fit (D4σ specification)
     - cf. beamfit/docs/
   - Least square trepanning symmetrical Gaussian fit (D4σ specification)
   - Second-order moments / ISO11146 beam width for elliptic beams (D4σ specification)
     - Based on this [implementation][imagemoments] by Raphaël Candelier with minor adjustments to fit the ISO11146 spec.
   
-- Image processing
+## Image processing
   - Built-in functionality includes various DC-offset removal / noise removal techniques including 
   [noisecomp][kovesi] from Peter Kovesi and [TV-L1 denoising][tvl1] from Manolis Lourakis.
   - Automated and/or GUI-cropping / pre-scaling of input for faster fitting etc.
