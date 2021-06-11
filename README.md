@@ -2,8 +2,7 @@
 
 ![Alt text](docs/logo.png?raw=true "Title")
 
-
-## Offline and Online analysis for laser beams, models include
+## Offline and Online analysis for laser beams
   - Least square elliptical rotated Gaussian fit (D4σ specification)
     - cf. beamfit/docs/
   - Least square trepanning symmetrical Gaussian fit (D4σ specification)
@@ -24,7 +23,6 @@
 - Online analysis supports IDS uEye cameras through uEyeDotNet.dll
   - Specification of uEye cameras (Pixel pitch etc.) are auto-detected.
   - Minor bugfixes were applied to the [uEye-dotnet Matlab library][ueye_lib] from [Dr. Adam Wyatt][adamwyatt]
-
 
 ## Features
 
