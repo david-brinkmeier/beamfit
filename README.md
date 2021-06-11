@@ -34,7 +34,7 @@ If this means nothing to you, a commercial system may be better suited for your 
 
 ## Disclaimer
 
-- As stated in the license...code provided "as is". If you need certified measurements, use certified measurement tools and software!
+- As stated in the license...code provided "as is". If you need certified measurements, use certified measurement hardware and software!
 
 [imagemoments]: <http://raphael.candelier.fr/?blog=Image%20Moments>
 [kovesi]: <https://www.peterkovesi.com/matlabfns/>
