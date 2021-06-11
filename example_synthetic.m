@@ -1,4 +1,3 @@
-clear global
 clearvars
 clc
 close all
@@ -17,7 +16,7 @@ ylimit = range(1):pixelpitch:range(2); % +/- µm
 [Xgrid,Ygrid] = meshgrid(xlimit,ylimit);
 
 % use symmetric or elliptic gaussian beam
-type = 'donut'; % type can be 'symmetric' or 'elliptic' or 'donut'
+type = 'elliptic'; % type can be 'symmetric' or 'elliptic' or 'donut'
 w0 = 64; % beam radius (symmetric beam) in µm
 w0x = 195; w0y = 125; % beam radius x/y (elliptic beam) in µm
 
@@ -109,13 +108,7 @@ settings.filename = []; % If unused, initialize emtpy, i.e. as []
 settings.outputpath = []; % if unused, initialize emtpy, i.e. as []
 settings.progressbar = false; % enable or disable progressbars
 
-for i = 1:1
-% Process image and save results
-% input_img = input_image_noise+50*rand(size(input_image_noise));
-input_img = input_image_noise;
-% input_img = UserCropImage(extra_noisy_img,'gray',true,limits);
-results = beamfit(settings,input_img); % gaussfit(settings,input_image_noise,background);
-end
+results = beamfit(settings,input_img);
 
 %% Check Toolbox dependencies
 % core_functions = {'autocrop.m',...
