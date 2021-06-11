@@ -1,31 +1,31 @@
 # Beamfit
 
-![Alt text](docs/logo.png?raw=true "Title")
+![](docs/logo.png?raw=true "beamfit")
 
 ## Offline and Online analysis for laser beams
-  - Least square elliptical rotated Gaussian fit (D4σ specification)
-    - cf. beamfit/docs/
-  - Least square trepanning symmetrical Gaussian fit (D4σ specification)
-  - Second-order moments / ISO11146 beam width for elliptic beams (D4σ specification)
+  - Least square elliptical rotated Gaussian fit (D4σ specification).
+    - cf. [docs](docs/)
+  - Least square trepanning (rotating on a circular path) symmetrical Gaussian fit (D4σ specification).
+  - Second-order moments / ISO11146 beam width for elliptic beams (D4σ specification).
     - Based on this [implementation][imagemoments] by Raphaël Candelier with minor adjustments to fit the ISO11146 spec.
+
+- **Offline analysis supports image and video processing**
+  - Examples and results for usage with [example_general_purpose.m](example_general_purpose.m) are provided in the [examples](examples/).
+  - [example_synthetic.m](example_synthetic.m) allows for generation and analysis of noisy rotated offset elliptical Gaussians as well as noisy trepanning offset symmetrical Gaussians for testing purposes.
+- **Online analysis supports IDS uEye cameras through uEyeDotNet.dll**
+  - [example_online_ueye.m](example_online_ueye.m) allows for online usage with uEye cameras. Make sure that the location of the *uEyeDotNet.dll* in the header is correct.
+  - Specification of uEye cameras (Pixel pitch etc.) are auto-detected. Check out the uEye [example](examples/ueye/) to see what it looks like with a beam incident on a diffuser and reimaged onto the sensor, which required heavy post-processing to get a useful online reading for the center of gravity due to speckles.
+  - Minor bugfixes were applied to the [uEye-dotnet Matlab library][ueye_lib] from [Dr. Adam Wyatt][adamwyatt].
   
 ## Image processing
   - Built-in functionality includes various DC-offset removal / noise removal techniques including 
   [noisecomp][kovesi] from Peter Kovesi and [TV-L1 denoising][tvl1] from Manolis Lourakis.
   - Automated and/or GUI-cropping / pre-scaling of input for faster fitting etc.
-  - Why image cleanup? Second-order moment determination of beam diameter/radius is particularly prone to measurement noise
+  - Why image cleanup? Second-order moment determination of beam diameter/radius is particularly prone to measurement noise.
     - Warning: Due to the definition of beam diameter through the second order moments this means it's also possible to effectively falsify the ISO11146 measurement through usage of excessive denoising.
   - Additionally / alternatively an offset background image which is subtracted from the input may be provided.
-  
-- Offline analysis supports image and video processing
-  - Examples and results for usage with example_general_purpose.m are provided in \examples\
-  - example_synthetic.m allows for generation and analysis of noisy rotated offset elliptical Gaussians as well as noisy trepanning offset symmetrical Gaussians for testing purposes.
-- Online analysis supports IDS uEye cameras through uEyeDotNet.dll
-  - Specification of uEye cameras (Pixel pitch etc.) are auto-detected.
-  - Minor bugfixes were applied to the [uEye-dotnet Matlab library][ueye_lib] from [Dr. Adam Wyatt][adamwyatt]
 
 ## Features
-
 - Horrible mess of procedural code, held in place by duct-tape.
   If I were to do it today, I would do it properly and most likely in Python.
 - That being said, the code works and has proven to be useful in practice. Especially when compared to many proprietary / expensive beam measurement software/hardware bundles.
