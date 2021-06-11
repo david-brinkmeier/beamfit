@@ -1,5 +1,15 @@
 clc
+clearvars
 close all
+
+% Select one or multiple images OR select one or multiple videos for
+% processing. Videos may be time-averaged.
+% Video results are a nested structure of per frame results and results for
+% the complete video.
+% especially if processing a complete video it is advised to disable
+% settings.savebeamprofile in order not to bloat the results.mat
+% Video processing only supports output of video and .mat file, if you need
+% every fig as .fig and results as .csv provide single images
 
 %% load dependencies
 addpath(genpath('dependencies'))
@@ -9,18 +19,18 @@ addpath(genpath('dependencies'))
 settings.fitvariant = 'gaussian'; % Fit model: 'gaussian' or 'donutgaussian' (donutgaussian is a trepanning symmetric gaussian)
 settings.CCDpixelpitch = 5.2; % Camera pixel pitch (square pixels) in µm
 settings.scaleInputFactor = 1; % scale input image (value < 1 reduces pixel count -> faster computation, > 1 oversampling)
-settings.useCOG = true; % true: use COG for all analysis, false: use index(max value) as start for regression, empty []: NONE
+settings.useCOG = true; % true: use COG as centroid for start of fit, false: use index(max value) as start for regression, empty []: NONE
 settings.Crop = 'user'; % Valid strings are 'off', 'user' and 'auto'
 settings.AutoCropStrength = 0; % Accepted Values: 0-100 (scaled as 0% loss to 50% acceptable energy loss)
-settings.PostProcessing = 'low'; % accepted values: 'off', 'low', 'medium', 'high', 'veryhigh', 'ultra', 'maximum'; Ultra adds kovesi, maximum adds TVDenoising
-settings.ISO11146 = false; % Calculate 2nd order central moments and plot ellipse + output beam radius short/long
+settings.PostProcessing = 'medium'; % accepted values: 'off', 'low', 'medium', 'high', 'veryhigh', 'ultra', 'maximum'; Ultra adds kovesi, maximum adds TVDenoising
+settings.ISO11146 = true; % Calculate 2nd order central moments and plot ellipse + output beam radius short/long
 settings.plot = true; % Plot results / automatically true if we save figure
 settings.view3D = true; % use 3D view instead of 2D (surf instead of imagesc), for video processing consider fixing zlim in guassfit.m
 settings.zlim = []; % useful for plotting 3D view of videos, needed to avoid the surf plot from "jumping", ex. uint8 max = 255;
 settings.colormap = 'parula'; % Matlab colormaps: 'gray', 'parula', 'jet'
-settings.shading = 'flat'; % Shading: 'flat' or 'interp' recommended
-settings.savefig = 0; % 0: off, 1: save PNG, 2: save PNG and FIG using optionally provided filename
-settings.savedata = 0; % 0: off, 1: save MAT, 2: save MAT and CSV (CSV only contains only CSV-appropriate data)
+settings.shading = 'interp'; % Shading: 'flat' or 'interp' recommended
+settings.savefig = 2; % 0: off, 1: save PNG, 2: save PNG and FIG using optionally provided filename
+settings.savedata = 2; % 0: off, 1: save MAT, 2: save MAT and CSV (CSV only contains only CSV-appropriate data)
 settings.savebeamprofile = 1; % enables saving of all processed beam images inside result struct (disable to save memory)
 settings.normalizedata = 1; % normalizes output maxval to 100
 settings.visuals = 0; % 0: default, 1: no annotation, 2: no cross section, 3: no annotation or cross section
@@ -33,7 +43,8 @@ videosettings.startframe = 1; % first frame for processing
 videosettings.sumframe = 1; % number of frames for time-averaging (1 means no averaging)
 videosettings.lastframe = inf; % last video frame to process (set to inf for complete video)
 videosettings.equalize = true; % if frames are averaged, equalize each frame value of each frame
-videosettings.saveVideo = 0; % enable to save a video from processing
+videosettings.saveVideo = 1; % enable to save a video from processing
+videosettings.compression = 1; % 0 is uncompressed AVI (LARGE!!!), 1 is mp4 @ max quality
 videosettings.FPS = 5; % video framerate
 
 %% prompt user for files and execute beam fitting
