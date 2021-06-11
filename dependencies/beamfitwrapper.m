@@ -79,9 +79,13 @@ else
         end
         % prepare video if user wants to export video
         if videosettings.saveVideo
+            if videosettings.compression
             vidwriterObj = VideoWriter([files.path, files.filename{i},'_beamfit','.mp4'],'MPEG-4'); %#ok<TNMLP>
-            vidwriterObj.Quality = 100; % Quality setting.
-            vidwriterObj.FrameRate = videosettings.FPS; % How many frames per second.
+            vidwriterObj.Quality = 100;
+            else
+                vidwriterObj = VideoWriter([files.path, files.filename{i},'_beamfit','.avi'],'Uncompressed AVI'); %#ok<TNMLP>
+            end
+            vidwriterObj.FrameRate = videosettings.FPS;
             open(vidwriterObj);
         end
         % integrate image over frame sections, crop and fit
