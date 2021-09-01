@@ -87,7 +87,7 @@ if ~ueyefigexists
         'String','select ROI','Position', [5,6,80,24]);
     % dropdown for selection of fitvariant
     selectFitvariant = uicontrol(beamfitpanel,'style','popup','Position',[92,4,80,25],...
-        'string',{'gaussian','donutgaussian'},'Value',1);
+        'string',{'gaussian','donutgaussian-approx','donutgaussian'},'Value',1);
     % dropdown for selection of postprocessing strength
     selectPostprocessing = uicontrol(beamfitpanel,'style','popup','Position',[180,4,80,25],...
         'string',{'off','low','medium','high','veryhigh','ultra','maximum'},'Value',3);

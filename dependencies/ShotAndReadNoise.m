@@ -1,4 +1,4 @@
-function output_image = ShotAndReadNoise(input_image,settings)
+function output_image = ShotAndReadNoise(input_image,settings,name)
 % Source: Modified from Photon_Gaussian_Noise.m
 % https://www.researchgate.net/profile/Milo_Hyde
 % 
@@ -71,7 +71,7 @@ output_image = image_shot_noise_read_noise;
 %%
 
 if settings.plot == true
-    [noise_eval,figdidexist] = genORselectfigbyname('Noise evaluation');
+    [noise_eval,figdidexist] = genORselectfigbyname(strcat('Noise evaluation:',32,name));
     if ~figdidexist
         screensize = get(0,'ScreenSize');
         set(noise_eval,'Position',[screensize(3)-800-8 46 800 640]);

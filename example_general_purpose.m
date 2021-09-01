@@ -28,7 +28,7 @@ addpath(genpath('dependencies'))
 
 %% Set up your settings for beamfitting here
 % settings for beamfitting
-settings.fitvariant = 'gaussian'; % Fit model: 'gaussian' or 'donutgaussian' (donutgaussian is a trepanning symmetric gaussian)
+settings.fitvariant = 'gaussian'; % Fit model: 'gaussian' or 'donutgaussian' (donutgaussian is a trepanning symmetric gaussian) or 'donutgaussian-approx' for Rtrepan/w0 >> 1.5
 settings.CCDpixelpitch = 5.2; % Camera pixel pitch (square pixels) in µm
 settings.scaleInputFactor = 1; % scale input image (value < 1 reduces pixel count -> faster computation, > 1 oversampling)
 settings.useCOG = 1; % true: use COG as centroid for start of fit, false: use index(max value) as start for regression, empty []: NONE

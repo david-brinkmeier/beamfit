@@ -152,11 +152,23 @@ switch lower(settings.fitvariant)
         % lb = [0,-bounds,0,-bounds,0,-pi/4,0];
         % ub = [realmax('double'),bounds,(bounds/2)^2,bounds,(bounds/2)^2,pi/4,max(beam(:))];
     
+    case 'donutgaussian-approx'
+        [Rtrepan,Xstart,Ystart] = get_Rguess(beam,pixelpitch,Xgrid(1,:),Ygrid(:,1));
+        % fprintf('Rtrepan guess %3.1f µm, Xstart guess %3.1f µm, Ystart guess %3.1f µm\n',Rtrepan,Xstart,Ystart)
+        % Trepanning rotationally symmetric gaussian fit function approx
+        fitfun = @(A,X) A(1)*exp(-2*(sqrt((X(:,:,1)-A(2)).^2+(X(:,:,2)-A(3)).^2)-A(5)).^2./A(4)^2)+A(6);
+        % inital (guess) parameters [Amp,x0,y0,w0,Rtrepan,DC_offset]
+        A0 = [Zstart,Xstart,Ystart,50,Rtrepan,DCstart];
+        % Define lower and upper bounds [Amp,x0,y0,w0,Rtrepan,DC_offset]
+        lb = [0,-bounds,-bounds,0,0,0];
+        ub = [realmax('double'),bounds,bounds,(bounds/2)^2,2*bounds,max(beam(:))];
+        
     case 'donutgaussian'
         [Rtrepan,Xstart,Ystart] = get_Rguess(beam,pixelpitch,Xgrid(1,:),Ygrid(:,1));
         % fprintf('Rtrepan guess %3.1f µm, Xstart guess %3.1f µm, Ystart guess %3.1f µm\n',Rtrepan,Xstart,Ystart)
         % Trepanning rotationally symmetric gaussian fit function
-        fitfun = @(A,X) A(1)*exp(-2*(sqrt((X(:,:,1)-A(2)).^2+(X(:,:,2)-A(3)).^2)-A(5)).^2./A(4)^2)+A(6);
+        fitfun = @(A,X) A(6)+A(1).*exp(-2*(((X(:,:,1)-A(2)).^2+(X(:,:,2)-A(3)).^2)+A(5).^2)./A(4)^2).* ...
+                                   besseli(0,4.*sqrt((X(:,:,1)-A(2)).^2+(X(:,:,2)-A(3)).^2).*A(5)./A(4)^2,0);
         % inital (guess) parameters [Amp,x0,y0,w0,Rtrepan,DC_offset]
         A0 = [Zstart,Xstart,Ystart,50,Rtrepan,DCstart];
         % Define lower and upper bounds [Amp,x0,y0,w0,Rtrepan,DC_offset]
@@ -178,6 +190,7 @@ end
 
 % Fit sample data -> execute lsqcurvefit
 [A,resnorm,~] = lsqcurvefit(fitfun,A0,X,beam,lb,ub,options);
+A(4)
 
 % Close dialog box
 if settings.progressbar == 1
@@ -234,8 +247,19 @@ switch lower(settings.fitvariant)
         [~,idx_angle] = min(abs(possible_angles));
         fprintf('--- COG_x: %3.1f µm, COG_y: %3.1f µm, w0x: %3.1f µm, w0y %3.1f µm, tcalc = %2.2f s\n',...
             results.wx_pos,results.wy_pos,results.wx_radius,results.wy_radius,tcalc);
-    case 'donutgaussian'
-        results.intensity = A(1);
+    case {'donutgaussian','donutgaussian-approx'}
+        switch lower(settings.fitvariant)
+            case 'donutgaussian'
+                results.intensity = max(fitfun(A,X),[],'all');
+                if A(5)/A(4) > 9
+                  warning('Numerical solution of Bessel function results in numerical overflow and loss of accuracy, it is adviced to use donutgaussian-approx for Rtrepan/w0 > 9');  
+                end
+            case 'donutgaussian-approx'
+                results.intensity = A(1);
+                if A(5)/A(4) < 1.5
+                    warning('approximate solution is inaccurate for Rtrepan/w0 < 1.5, use fit model "donutgaussian"!');
+                end
+        end
         results.wx_pos = A(2);
         results.wx_radius = A(4);
         results.wy_pos = A(3);
@@ -357,7 +381,7 @@ if settings.plot || settings.savefig
             vx_v = real(vertline);
             vy_v = imag(vertline);
 
-        case 'donutgaussian'
+        case {'donutgaussian','donutgaussian-approx'}
             % old implementation for -pi/4 to pi/4
             % vy_h = 0*vx_h+A(3); % donut gaussian
             % vx_v = 0*vy_v+A(2); % donut gaussian
@@ -380,7 +404,7 @@ if settings.plot || settings.savefig
             switch lower(settings.fitvariant)
                 case 'gaussian'
                     plot3(A(2),A(4),vcenter,'+b'); % gaussian beam y-axis
-                case 'donutgaussian'
+                case {'donutgaussian','donutgaussian-approx'}
                     plot3(A(2),A(3),vcenter,'+b'); % donut gaussian x-axis
             end
             plot3(vx_h,vy_h,1.025.*hPoints,color2);
@@ -389,7 +413,7 @@ if settings.plot || settings.savefig
             switch lower(settings.fitvariant)
                 case 'gaussian'
                     plot(A(2),A(4),'+b'); % gaussian beam
-                case 'donutgaussian'
+                case {'donutgaussian','donutgaussian-approx'}
                     plot(A(2),A(3),'+b'); % donut gaussian
             end
             plot(vx_h,vy_h,color2);
@@ -408,13 +432,20 @@ if settings.plot || settings.savefig
             vfit= A(7)+A(1)*exp(-2*(yfit-A(4)).^2/(A(5)^2)); % gaussian beam y-axis
             xposh = (vx_h-A(2))/cos(A(6))+A(2); % rotated ellipse
             xposv = (vy_v-A(4))/cos(A(6))+A(4); % rotated ellipse
-        case 'donutgaussian'
-            hfit = A(1)*exp(-2*(sqrt((xfit-A(2)).^2)-A(5)).^2./A(4)^2)+A(6); % donut gaussian x-axis
-            vfit = A(1)*exp(-2*(sqrt((yfit-A(3)).^2)-A(5)).^2./A(4)^2)+A(6); % donut gaussian y-axis
+        case 'donutgaussian'                 
+            hfit = A(6)+A(1).*exp(-2*(((xfit-A(2)).^2)+A(5).^2)./A(4)^2).* ...
+                   besseli(0,4.*sqrt((xfit-A(2)).^2).*A(5)./A(4)^2,0); % donut gaussian x-axis
+            vfit = A(6)+A(1).*exp(-2*(((yfit-A(3)).^2)+A(5).^2)./A(4)^2).* ...
+                   besseli(0,4.*sqrt((yfit-A(3)).^2).*A(5)./A(4)^2,0); % donut gaussian y-axis
+            xposh = vx_h; % donut
+            xposv = vy_v; % donut
+        case 'donutgaussian-approx'
+            hfit = A(1)*exp(-2*(sqrt((xfit-A(2)).^2)-A(5)).^2./A(4)^2)+A(6); % donut gaussian x-axis approx
+            vfit = A(1)*exp(-2*(sqrt((yfit-A(3)).^2)-A(5)).^2./A(4)^2)+A(6); % donut gaussian y-axis approx
             xposh = vx_h; % donut
             xposv = vy_v; % donut
     end
-    
+
     % projection on horizontal axis
     subplot(4,4,[1,2,3]); cla;
     plot(xposh,hPoints,'r',xfit,hfit,'black','LineWidth',1.5); grid off; axis([-bounds,bounds,dmin,dmax]);
@@ -436,7 +467,7 @@ if settings.plot || settings.savefig
         switch lower(settings.fitvariant)
             case 'gaussian'
                 str1 = ('I (a.u.) / x_0 [µm] / w_0x [µm] / y_0 [µm] / w_0y [µm] / angle [°]');
-            case 'donutgaussian'
+            case {'donutgaussian','donutgaussian-approx'}
                 str1 = ('I (a.u.) / x_0 [µm] / w_0x [µm] / y_0 [µm] / w_0y [µm] / r_{trepan} [µm]');
         end
         annotation('textbox',...
@@ -473,10 +504,10 @@ if settings.plot || settings.savefig
                     'String',num2str(possible_angles(idx_angle),'%.2f'),textsetup{:});
                     % 'String',num2str(-A(6)*180/pi,'%.2f'),textsetup{:});
                     % 'String',num2str(mod(-A(6)*180/pi,90),'%.2f'),textsetup{:});
-            case 'donutgaussian'
+            case {'donutgaussian','donutgaussian-approx'}
                 annotation('textbox',...
                     [0.131 0.613 0.1 0.0625],...
-                    'String',num2str(A(1),'%.2f'),textsetup{:});
+                    'String',num2str((results.intensity),'%.2f'),textsetup{:});
                 annotation('textbox',...
                     [0.21 0.613 0.1 0.0625],...
                     'String',num2str(A(2),'%.2f'),textsetup{:});
@@ -583,7 +614,13 @@ end
 function [settings, beam, background] = parse_inputs(varargin)
 narginchk(2,3)
 settings = varargin{1};
+% convert to grayscale
 beam = convert2grayscale(varargin{2});
+% remove NaN
+if any(isnan(beam(:)))
+    error('Image contains NaN.')
+end
+
 switch nargin
     case 2
         background = [];
