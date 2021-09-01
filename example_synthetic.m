@@ -31,7 +31,7 @@ fitvariant = 'donutgaussian'; % fit model can be 'gaussian' or 'donutgaussian' o
 
 % beam specifications
 w0 = 50; % beam radius (symmetric beam) in µm
-w0x = 295; w0y = 125; % beam radius x/y (elliptic beam) in µm
+w0x = 34; w0y = 60; % beam radius x/y (elliptic beam) in µm
 
 % is the beam offset from the center (0,0) and rotated or donut?
 x_offset = 0; % in µm
@@ -42,8 +42,8 @@ Rtrepan = 150; % trepan radius in µm, only applies to donut gaussian
 %% Do we add noise? (most of the stuff below is only for filename when saving)
 addnoise.enable = 1;
 addnoise.saveimages = 0; % true enables saving images as png files
-addnoise.quantum_well_depth = 2e1; % configures poisson / shot noise [recommended: 1e1-1e5] (high - low)
-addnoise.sigma_read = 20; % configures readout noise / gaussian white noise [recommended: 0-50] (off - high)
+addnoise.quantum_well_depth = 5e1; % configures poisson / shot noise [recommended: 1e1-1e5] (high - low)
+addnoise.sigma_read = 5; % configures readout noise / gaussian white noise [recommended: 0-50] (off - high)
 addnoise.plot = true; % do we want to before / after noise?
 addnoise.pixelpitch = pixelpitch;
 if strcmp(type,'elliptic')
@@ -110,12 +110,12 @@ end
 settings.CCDpixelpitch = pixelpitch; % Camera pixel pitch (square pixels) in µm
 settings.scaleInputFactor = 1; % scale input image (value < 1 reduces pixel count -> faster computation, > 1 oversampling)
 settings.useCOG = false; % true: use COG for all analysis, false: use index(max value) as start for regression, empty []: NONE
-settings.Crop = 'off'; % Valid strings are 'off', 'user' and 'auto'
+settings.Crop = 'user'; % Valid strings are 'off', 'user' and 'auto'
 settings.AutoCropStrength = 0.1; % Accepted Values: 0-100 (scaled as 0% loss to 50% acceptable energy loss)
-settings.PostProcessing = 'off'; % accepted values: 'off', 'low', 'medium', 'high', 'veryhigh', 'ultra', 'maximum'; Ultra adds kovesi, maximum adds TVDenoising
+settings.PostProcessing = 'low'; % accepted values: 'off', 'low', 'medium', 'high', 'veryhigh', 'ultra', 'maximum'; Ultra adds kovesi, maximum adds TVDenoising
 settings.ISO11146 = true; % Calculate 2nd order central moments and plot ellipse + output beam radius short/long
 settings.plot = true; % Plot results / automatically true if we save figure
-settings.view3D = true; % use 3D view instead of 2D (surf instead of imagesc), for video processing consider fixing zlim in guassfit.m
+settings.view3D = 0; % use 3D view instead of 2D (surf instead of imagesc), for video processing consider fixing zlim in guassfit.m
 settings.zlim = []; % useful for plotting 3D view of videos, needed to avoid the surf plot from "jumping", ex. uint8 max = 255;
 settings.colormap = 'jet'; % Matlab colormaps, i.e. 'gray', 'parula', 'jet'
 settings.shading = 'flat'; % Shading: 'flat' or 'interp' recommended
