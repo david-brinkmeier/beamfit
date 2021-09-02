@@ -320,7 +320,8 @@ if settings.plot || settings.savefig
     ax = subplot(4,4,[5,6,7,9,10,11,13,14,15]); cla
     if settings.view3D == true
         surf(Xgrid(1,:),Ygrid(:,1),beam);
-        shading(gca, settings.shading); view(-14,50);
+        shading(ax, settings.shading); view(-15.5,50);
+        box(ax,'off'), grid(ax,'off');
         zlabel('relative intensity')
     else
         pcolor(Xgrid(1,:),Ygrid(:,1),beam), shading(gca, settings.shading); %shading(gca, settings.shading);
@@ -341,7 +342,7 @@ if settings.plot || settings.savefig
     
     xlim([Xgrid(1) Xgrid(end)]), ylim([Ygrid(1) Ygrid(end)]);
     xlabel('distance in µm'), ylabel('distance in µm'), colormap(settings.colormap);
-    box on, ax.LineWidth = 1; ax.FontSize = 12;
+    ax.LineWidth = 1; ax.FontSize = 12;
     
     % set ticks...uneven number of ticks to get the 0 tick
     tickvals = round(linspace(0,Xgrid(end)*0.95,4),-1);
@@ -455,17 +456,17 @@ if settings.plot || settings.savefig
     % projection on horizontal axis
     axhor = subplot(4,4,[1,2,3]); cla;
     plot(xposh,hPoints,'r',xfit,hfit,'black','LineWidth',1.5); grid off; axis([-bounds,bounds,dmin,dmax]);
-    axhor.Position = [0.1300 0.7 0.57 0.1566]; axis off
+    axhor.Position = [0.1300 0.725 0.57 0.1566]; axis off
     
     % projection on vertical axis
     axver = subplot(4,4,[8,12,16]); cla;
     plot(vPoints,xposv,'r',vfit,yfit,'black','LineWidth',1.5); grid off; axis([dmin,dmax,-bounds,bounds]);
-    axver.Position = [0.7075 0.122 0.1566 0.5700]; axis off
+    axver.Position = [0.7325 0.122 0.1566 0.5700]; axis off
     
     if ismember(settings.visuals,[0, 2])
         % delete old annotations: not doing this causes a memory leak and poor performance
         delete(findall(fitfig,'type','annotation'))
-        annot_offset = 0.2;
+        annot_offset = 0.23;
         % Annotation / Text Setup
         textsetup = {'FitBoxToText','off','EdgeColor','none','LineWidth',1,'FontName','Arial',...
             'BackgroundColor',[1 1 1],'Color',[0 0 0],'FaceAlpha',0,'FontSize',12,'FontWeight','normal'};
