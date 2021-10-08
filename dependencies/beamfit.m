@@ -190,7 +190,6 @@ end
 
 % Fit sample data -> execute lsqcurvefit
 [A,resnorm,~] = lsqcurvefit(fitfun,A0,X,beam,lb,ub,options);
-A(4)
 
 % Close dialog box
 if settings.progressbar == 1
